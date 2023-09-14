@@ -1,5 +1,6 @@
 # NativeInstall
 Open source program for mounting .iso files from Native Instruments, as well as keeping track of installations.
+This is a work in progress, so most of the functionalities are not implemented yet.
 
 ##Description
 

@@ -31,6 +31,10 @@ MainWindow::MainWindow(QWidget *parent)
     scrollContent->setLayout(ui->gridLayout);
     ui->scrollArea->setWidget(scrollContent);
 
+    QWidget *installContent = new QWidget;
+    installContent->setLayout(ui->gridLayout_2);
+    ui->scrollArea_2->setWidget(installContent);
+
     //on start, we open the installed plugins .json object, if it exists. Create it if not.
     readJson();
 }
@@ -89,7 +93,7 @@ void MainWindow::on_ScanButton_clicked()
                         PluginLabel->setText(str);
                         QPushButton *InstallButton = new QPushButton();
                         InstallButton->setObjectName(str);
-                        InstallButton->setText("Install");
+                        InstallButton->setText("Mount");
                         connect(InstallButton, &QPushButton::clicked, this, &MainWindow::onInstallClicked);
                         ui->gridLayout->addWidget(PluginLabel);
                         ui->gridLayout->addWidget(InstallButton);
@@ -129,7 +133,7 @@ void MainWindow::onInstallClicked()
         {
             if(Err.contains("WARNING: source write-protected, mounted read-only.\n"))
             {
-                ui->ErrorLabel->setText("Mounted " + name + " Successfully.\n Install the mouted software from your filesystem.");
+                ui->ErrorLabel->setText("Mounted " + name + " Successfully.\n Install the mounted software from your filesystem.");
             }
             else
             {
@@ -138,9 +142,6 @@ void MainWindow::onInstallClicked()
         }
     }
 }
-
-
-
 
 void MainWindow::on_MountPathButton_clicked()
 {
@@ -157,6 +158,9 @@ void MainWindow::on_MountPathButton_clicked()
 
 void MainWindow::readJson()
 {
+    //this function gets called on program start.
+    //The opened file is a json array with each plugin containing
+    //each plugin's name and installation date.
     QFile inFile("installedplugins.json");
     inFile.open(QIODevice::ReadOnly|QIODevice::Text);
     QByteArray data = inFile.readAll();
@@ -168,7 +172,21 @@ void MainWindow::readJson()
         qDebug() << "Parse failed";
     }
     QJsonArray rootArray = doc.array();
-    qDebug() << rootArray[1].isObject();
+    for(int i = 0; i < rootArray.size(); i++)
+    {
+        if(rootArray[i].isObject())
+        {
+            QJsonObject obj = rootArray[i].toObject();
+            qDebug() << obj.value("installedFileName").toString();
+            QLabel *installLabel = new QLabel(this, Qt::Widget);
+            installLabel->setText(obj.value("installedFileName").toString());
+            ui->gridLayout_2->addWidget(installLabel);
+            ui->scrollArea_2->setWidgetResizable(true);
+            ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
+
+        }
+    }
+    qDebug() << rootArray.size();
 }
 
 

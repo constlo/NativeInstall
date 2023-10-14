@@ -190,6 +190,17 @@
        <height>319</height>
       </rect>
      </property>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>231</width>
+        <height>711</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2"/>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="label">

@@ -8,6 +8,8 @@
 #include <QList>
 #include <QMap>
 #include <QJsonObject>
+#include <QString>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,9 +29,14 @@ private slots:
     void on_SelectButton_clicked();
     void onInstallClicked();
 
+    void on_MountPathButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStringList *SessionPlugins;
     QStringList *InstalledPlugins;
+    QString *mountfolder;
+
+    void readJson();
 };
 #endif // MAINWINDOW_H

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
+    <width>975</width>
     <height>581</height>
    </rect>
   </property>
@@ -14,24 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="MainAppNameLabel">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>20</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Native Install</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="SelectButton">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>120</y>
+      <y>170</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -44,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>80</y>
+      <y>130</y>
       <width>311</width>
       <height>18</height>
      </rect>
@@ -57,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>120</y>
+      <y>170</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -70,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>100</y>
+      <y>150</y>
       <width>271</width>
       <height>18</height>
      </rect>
@@ -83,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>190</y>
+      <y>240</y>
       <width>371</width>
       <height>31</height>
      </rect>
@@ -96,7 +83,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>160</y>
+      <y>210</y>
       <width>541</width>
       <height>231</height>
      </rect>
@@ -130,16 +117,110 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QLabel" name="ErrorLabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>460</y>
+      <width>541</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Mountfoldershowerlabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>30</y>
+      <width>131</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mount folder path: </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MountPathLabel">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>30</y>
+      <width>441</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="MountPathButton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>50</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select...</string>
+    </property>
+   </widget>
+   <widget class="QScrollArea" name="scrollArea_2">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>120</y>
+      <width>251</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>249</width>
+       <height>319</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>90</y>
+      <width>141</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Installed Products: </string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>747</width>
+     <width>975</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuNativeInstall">
+    <property name="title">
+     <string>NativeInstall</string>
+    </property>
+   </widget>
+   <addaction name="menuNativeInstall"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -9,6 +9,10 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QMap>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     QWidget *scrollContent = new QWidget;
     scrollContent->setLayout(ui->gridLayout);
-
     ui->scrollArea->setWidget(scrollContent);
 
-
+    //on start, we open the installed plugins .json object, if it exists. Create it if not.
+    readJson();
 }
 
 MainWindow::~MainWindow()
@@ -72,12 +76,14 @@ void MainWindow::on_ScanButton_clicked()
             {
                 ui->ResultLabel->setText("Found the following isos: ");
                 QStringList foundIsos = Res.split("\n");
+                //The last element found is empty. Pop it from the stringlist.
                 foundIsos.pop_back();
                 foreach (QString str, foundIsos) {
                     if(!SessionPlugins->contains(str))
                     {
                         SessionPlugins->append(str);
                         qDebug() << str;
+                        //we add the newly found elements into the scrollarea widget.
                         QLabel *PluginLabel = new QLabel(this, Qt::Widget);
                         PluginLabel->setObjectName(str);
                         PluginLabel->setText(str);
@@ -89,8 +95,6 @@ void MainWindow::on_ScanButton_clicked()
                         ui->gridLayout->addWidget(InstallButton);
                         ui->scrollArea->ensureWidgetVisible(InstallButton, 200, 200);
                         ui->scrollArea->setWidgetResizable(true);
-
-
                     }
                 }
 
@@ -112,14 +116,59 @@ void MainWindow::onInstallClicked()
         QString name = senderObj->objectName();
         qDebug() << name;
         QProcess*  process = new QProcess(this);
-        QString command = " mount -t udf " + ui->folderLabel->text() + "/" + name + " -o unhide ./mnt";
+        QString command = " mount -t udf " + ui->folderLabel->text() + "/" + name + " -o unhide " + ui->MountPathLabel->text();
         qDebug() << command;
-        process->start("/usr/bin/sudo", QStringList() << "-c" << command);
+        process->start("bash", QStringList() << "-c" << command);
         process->waitForFinished(-1);
         QString Res = process->readAllStandardOutput();
         QString Err = process->readAllStandardError();
+        qDebug() << Res;
+        qDebug() << Err;
+        //If we have an error mounting the iso, report the error to the user.
+        if(Err != "")
+        {
+            if(Err.contains("WARNING: source write-protected, mounted read-only.\n"))
+            {
+                ui->ErrorLabel->setText("Mounted " + name + " Successfully.\n Install the mouted software from your filesystem.");
+            }
+            else
+            {
+                ui->ErrorLabel->setText("Error: " + Err);
+            }
+        }
     }
 }
 
+
+
+
+void MainWindow::on_MountPathButton_clicked()
+{
+    QString MountPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                           "/home",
+                                                           QFileDialog::ShowDirsOnly
+                                                               | QFileDialog::DontResolveSymlinks);
+    if(!MountPath.isEmpty())
+    {
+        //if we found a folder
+        ui->MountPathLabel->setText(MountPath);
+    }
+}
+
+void MainWindow::readJson()
+{
+    QFile inFile("installedplugins.json");
+    inFile.open(QIODevice::ReadOnly|QIODevice::Text);
+    QByteArray data = inFile.readAll();
+    inFile.close();
+
+    QJsonParseError errorPtr;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &errorPtr);
+    if (doc.isNull()) {
+        qDebug() << "Parse failed";
+    }
+    QJsonArray rootArray = doc.array();
+    qDebug() << rootArray[1].isObject();
+}
 
 

@@ -1,7 +1,12 @@
+![Linux badge](https://img.shields.io/badge/Linux-teal)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+![QT](https://img.shields.io/badge/QT-green)
+
 # NativeInstall
 Open source program for mounting .iso files from Native Instruments, as well as keeping track of installations.
+This is a work in progress, so most of the functionalities are not implemented yet.
 
-##Description
+## Description
 
 ![image](https://github.com/constlo/NativeInstall/assets/79052688/a6b1840a-9816-4ee6-b565-0feaf18b7fa3)
 

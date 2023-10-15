@@ -199,5 +199,3 @@ void MainWindow::readJson()
         qDebug() << rootArray.size();
     }
 }
-
-

@@ -146,9 +146,7 @@ void MainWindow::onInstallClicked()
 void MainWindow::on_MountPathButton_clicked()
 {
     QString MountPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                           "/home",
-                                                           QFileDialog::ShowDirsOnly
-                                                               | QFileDialog::DontResolveSymlinks);
+    "/home",    QFileDialog::ShowDirsOnly   |   QFileDialog::DontResolveSymlinks);
     if(!MountPath.isEmpty())
     {
         //if we found a folder
@@ -163,30 +161,43 @@ void MainWindow::readJson()
     //each plugin's name and installation date.
     QFile inFile("installedplugins.json");
     inFile.open(QIODevice::ReadOnly|QIODevice::Text);
-    QByteArray data = inFile.readAll();
-    inFile.close();
-
-    QJsonParseError errorPtr;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &errorPtr);
-    if (doc.isNull()) {
-        qDebug() << "Parse failed";
-    }
-    QJsonArray rootArray = doc.array();
-    for(int i = 0; i < rootArray.size(); i++)
+    qDebug() << inFile.exists();
+    if(!inFile.exists())
     {
-        if(rootArray[i].isObject())
-        {
-            QJsonObject obj = rootArray[i].toObject();
-            qDebug() << obj.value("installedFileName").toString();
-            QLabel *installLabel = new QLabel(this, Qt::Widget);
-            installLabel->setText(obj.value("installedFileName").toString());
-            ui->gridLayout_2->addWidget(installLabel);
-            ui->scrollArea_2->setWidgetResizable(true);
-            ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
-
-        }
+        inFile.close();
+        //create the file and write an empty JSON array into it, should it not exist.
+        inFile.open(QIODevice::ReadWrite|QIODevice::Text);
+        inFile.write("[]");
+        inFile.close();
     }
-    qDebug() << rootArray.size();
+    else
+    {
+        QByteArray data = inFile.readAll();
+        inFile.close();
+
+        QJsonParseError errorPtr;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &errorPtr);
+        if (doc.isNull()) {
+            qDebug() << "Parse failed";
+            //if the file is not present, create it.
+        }
+        QJsonArray rootArray = doc.array();
+        for(int i = 0; i < rootArray.size(); i++)
+        {
+            if(rootArray[i].isObject())
+            {
+                QJsonObject obj = rootArray[i].toObject();
+                qDebug() << obj.value("installedFileName").toString();
+                QLabel *installLabel = new QLabel(this, Qt::Widget);
+                installLabel->setText(obj.value("installedFileName").toString());
+                ui->gridLayout_2->addWidget(installLabel);
+                ui->scrollArea_2->setWidgetResizable(true);
+                ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
+
+            }
+        }
+        qDebug() << rootArray.size();
+    }
 }
 
 

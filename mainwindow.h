@@ -34,9 +34,10 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStringList *SessionPlugins;
-    QStringList *InstalledPlugins;
+    QJsonArray *InstalledPlugins;
     QString *mountfolder;
 
     void readJson();
+    void updateInstalls(QJsonArray arr);
 };
 #endif // MAINWINDOW_H

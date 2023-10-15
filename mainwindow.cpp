@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->gridLayout->setSizeConstraint(QLayout::SetMaximumSize);
 
     SessionPlugins = new QStringList();
-    InstalledPlugins = new QStringList();
+    InstalledPlugins = new QJsonArray();
 
     QWidget *scrollContent = new QWidget;
     scrollContent->setLayout(ui->gridLayout);
@@ -198,4 +198,9 @@ void MainWindow::readJson()
         }
         qDebug() << rootArray.size();
     }
+}
+
+void MainWindow::updateInstalls(QJsonArray arr)
+{
+    //
 }

@@ -4,7 +4,33 @@
 
 # NativeInstall
 Open source program for mounting .iso files from Native Instruments, as well as keeping track of installations.
-This is a work in progress, so most of the functionalities are not implemented yet.
+This program does not handle the .exe installations themselves, which have to be run with wine inside the filesystem.
+
+## Install & requirements
+**Tested on**: Pop_Os! 22.04 
+
+**QT Version**: 6.5 or higher
+
+You also need the legacy 1.8 version of native access to work with wine. 
+This will not work with the newer electron-based Native Access 2.0, as it does not currently work with wine.
+
+1. Copy the repository to your folder of choice
+2. Create a build folder inside the cloned folder using 
+   `mkdir build`
+
+3. `cd build`
+   
+4. `make .. `
+
+5. `make install `
+
+To run this program, as of now it will only function properly with sudo(unsafe, so use at your own risk).
+Run:
+
+`sudo ./NativeInstall`
+
+This program will do the task of mounting and logging the mounted files. 
+The user still has to install the files inside the mounted filesystem.
 
 ## Description
 

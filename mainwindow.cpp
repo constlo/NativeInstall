@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->gridLayout->setSizeConstraint(QLayout::SetMaximumSize);
 
     SessionPlugins = new QStringList();
-    InstalledPlugins = new QJsonArray();
+    InstalledPlugins = QJsonArray();
 
     QWidget *scrollContent = new QWidget;
     scrollContent->setLayout(ui->gridLayout);
@@ -41,14 +42,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete SessionPlugins;
-    delete InstalledPlugins;
+    //upon closing the program, write contents of the installedplugins json to the file.
+    writeJson(InstalledPlugins);
     delete ui;
 }
 
 
 void MainWindow::on_SelectButton_clicked()
 {
+    //this slot opens up the folder of the downloaded .iso files and stores the folder path to ui->folderLabel.
     QString folderName = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                                                            "/home",
                                                            QFileDialog::ShowDirsOnly
@@ -63,6 +65,7 @@ void MainWindow::on_SelectButton_clicked()
 
 void MainWindow::on_ScanButton_clicked()
 {
+    //this slot scans the folder using ls | grep .iso command on linux, and adds them to the scroll area with an install button.
     if(!ui->folderLabel->text().isNull())
     {
         QProcess*  process = new QProcess(this);
@@ -131,9 +134,18 @@ void MainWindow::onInstallClicked()
         //If we have an error mounting the iso, report the error to the user.
         if(Err != "")
         {
+            //this warning indicates that the mount was succesful.
             if(Err.contains("WARNING: source write-protected, mounted read-only.\n"))
             {
                 ui->ErrorLabel->setText("Mounted " + name + " Successfully.\n Install the mounted software from your filesystem.");
+                //now we push the new installed iso to the qjson array, as well as the date of the mounting.
+                QJsonObject object = QJsonObject();
+                QDateTime dateTime = QDateTime();
+                object.insert("installedFileName", name);
+                object.insert("dateOfInstall", dateTime.date().toString());
+                InstalledPlugins.append(object);
+                qDebug() << InstalledPlugins;
+                updateMounts(InstalledPlugins);
             }
             else
             {
@@ -153,6 +165,42 @@ void MainWindow::on_MountPathButton_clicked()
     {
         //if we found a folder
         ui->MountPathLabel->setText(MountPath);
+    }
+}
+
+
+
+void MainWindow::updateMounts(QJsonArray arr)
+{
+    //this method gets called in two situations:
+    //the user opens the program, in which the installedplugins.json is either generated or read.
+    //the user mounts an iso using the UI.
+    //this method updates the UI's installed plugins section with new info on mounted plugins.
+
+    //delete the scrollarea's widgets, should there be any.
+    //first get the gridlayout's size.
+    int size = ui->gridLayout_2->count();
+    qDebug() << size;
+    if(size > 0)
+    {
+        for(int i = 0; i < size; i++)
+        {
+            delete ui->gridLayout_2->itemAt(0)->widget();
+        }
+    }
+
+    for(int i = 0; i < arr.size(); i++)
+    {
+        if(arr[i].isObject())
+        {
+            QJsonObject obj = arr[i].toObject();
+            qDebug() << obj.value("installedFileName").toString();
+            QLabel *installLabel = new QLabel(this, Qt::Widget);
+            installLabel->setText(obj.value("installedFileName").toString());
+            ui->gridLayout_2->addWidget(installLabel);
+            ui->scrollArea_2->setWidgetResizable(true);
+            ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
+        }
     }
 }
 
@@ -183,43 +231,20 @@ void MainWindow::readJson()
             qDebug() << "Parse failed";
             //if the file is not present, create it.
         }
-        QJsonArray rootArray = doc.array();
-        updateMounts(rootArray);
+        InstalledPlugins = doc.array();
+        updateMounts(InstalledPlugins);
     }
 }
 
-void MainWindow::updateMounts(QJsonArray arr)
+
+void MainWindow::writeJson(QJsonArray arr)
 {
-    //this function gets called in two situations:
-    //the user opens the program, in which the installedplugins.json is either generated or read.
-    //the user mounts an iso using the UI.
-    //this method updates the UI's installed plugins section with new info on mounted plugins.
-
-    //delete the scrollarea's widgets, should there be any.
-    //first get the gridlayout's size.
-    int size = ui->gridLayout_2->count();
-    qDebug() << size;
-    if(size > 0)
-    {
-        for(int i = 0; i < size; i++)
-        {
-            delete ui->gridLayout_2->itemAt(0)->widget();
-        }
-    }
-
-    for(int i = 0; i < arr.size(); i++)
-    {
-        if(arr[i].isObject())
-        {
-            QJsonObject obj = arr[i].toObject();
-            qDebug() << obj.value("installedFileName").toString();
-            QLabel *installLabel = new QLabel(this, Qt::Widget);
-            installLabel->setText(obj.value("installedFileName").toString());
-            ui->gridLayout_2->addWidget(installLabel);
-            ui->scrollArea_2->setWidgetResizable(true);
-            ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
-
-
-        }
-    }
+    //this method saves the installed plugins to installedplugins.json upon closing the program.
+    QJsonDocument jsonDoc(InstalledPlugins);
+    QByteArray byteArray = jsonDoc.toJson();
+    qDebug()<< arr;
+    QFile inFile("installedplugins.json");
+    inFile.open(QIODevice::ReadWrite|QIODevice::Text);
+    inFile.write(byteArray);
+    inFile.close();
 }

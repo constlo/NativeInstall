@@ -8,6 +8,7 @@
 #include <QList>
 #include <QMap>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QString>
 #include <QFile>
 
@@ -34,11 +35,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStringList *SessionPlugins;
-    QJsonArray *InstalledPlugins;
+    QJsonArray InstalledPlugins;
     QString *mountfolder;
 
     void readJson();
-    void writeJson();
+    void writeJson(QJsonArray arr);
     void updateMounts(QJsonArray arr);
 };
 #endif // MAINWINDOW_H

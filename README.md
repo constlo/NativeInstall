@@ -55,7 +55,8 @@ This is a work-in-progress program and may become unusable in the future if the 
 3. Inside the program, choose your mount folder by pressing the button under "mount folder path"
    ![image](https://github.com/constlo/NativeInstall/assets/79052688/872a1950-09c2-46d8-8f3d-79408454e926)
 
-4. Choose the folder your .iso files are downloaded into, and scan the folder for .iso files by pressing the "scan"-button. 
+4. Choose the folder your .iso files are downloaded into, and scan the folder for .iso files by pressing the "scan"-button.
+   
    ![image](https://github.com/constlo/NativeInstall/assets/79052688/94fed914-8077-4bcd-99b4-d0c76e14a708)
 
 5. You should see your plugins inside a scroll area below the "Select" and "Scan"-buttons.

@@ -38,6 +38,7 @@ private:
     QString *mountfolder;
 
     void readJson();
-    void updateInstalls(QJsonArray arr);
+    void writeJson();
+    void updateMounts(QJsonArray arr);
 };
 #endif // MAINWINDOW_H

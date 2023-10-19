@@ -143,8 +143,10 @@ void MainWindow::onInstallClicked()
     }
 }
 
+
 void MainWindow::on_MountPathButton_clicked()
 {
+    //this slot is used to retrieve the mount path.
     QString MountPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
     "/home",    QFileDialog::ShowDirsOnly   |   QFileDialog::DontResolveSymlinks);
     if(!MountPath.isEmpty())
@@ -182,25 +184,42 @@ void MainWindow::readJson()
             //if the file is not present, create it.
         }
         QJsonArray rootArray = doc.array();
-        for(int i = 0; i < rootArray.size(); i++)
-        {
-            if(rootArray[i].isObject())
-            {
-                QJsonObject obj = rootArray[i].toObject();
-                qDebug() << obj.value("installedFileName").toString();
-                QLabel *installLabel = new QLabel(this, Qt::Widget);
-                installLabel->setText(obj.value("installedFileName").toString());
-                ui->gridLayout_2->addWidget(installLabel);
-                ui->scrollArea_2->setWidgetResizable(true);
-                ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
-
-            }
-        }
-        qDebug() << rootArray.size();
+        updateMounts(rootArray);
     }
 }
 
-void MainWindow::updateInstalls(QJsonArray arr)
+void MainWindow::updateMounts(QJsonArray arr)
 {
-    //
+    //this function gets called in two situations:
+    //the user opens the program, in which the installedplugins.json is either generated or read.
+    //the user mounts an iso using the UI.
+    //this method updates the UI's installed plugins section with new info on mounted plugins.
+
+    //delete the scrollarea's widgets, should there be any.
+    //first get the gridlayout's size.
+    int size = ui->gridLayout_2->count();
+    qDebug() << size;
+    if(size > 0)
+    {
+        for(int i = 0; i < size; i++)
+        {
+            delete ui->gridLayout_2->itemAt(0)->widget();
+        }
+    }
+
+    for(int i = 0; i < arr.size(); i++)
+    {
+        if(arr[i].isObject())
+        {
+            QJsonObject obj = arr[i].toObject();
+            qDebug() << obj.value("installedFileName").toString();
+            QLabel *installLabel = new QLabel(this, Qt::Widget);
+            installLabel->setText(obj.value("installedFileName").toString());
+            ui->gridLayout_2->addWidget(installLabel);
+            ui->scrollArea_2->setWidgetResizable(true);
+            ui->scrollArea->ensureWidgetVisible(installLabel, 200, 200);
+
+
+        }
+    }
 }

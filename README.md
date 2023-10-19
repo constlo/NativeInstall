@@ -4,7 +4,9 @@
 
 # NativeInstall
 Open source program for mounting .iso files and keeping track of mounted filesystems.
-This program does not handle the .exe installations themselves, which have to be run with wine inside the filesystem.
+
+![program](https://github.com/constlo/NativeInstall/assets/79052688/5e19b9bf-7653-459c-ba16-e7b5c0738ba4)
+
 
 ## Description
 This program is intended for linux users who would like to use NI plugins with their music production software.

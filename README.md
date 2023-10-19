@@ -3,16 +3,38 @@
 ![QT](https://img.shields.io/badge/QT-green)
 
 # NativeInstall
-Open source program for mounting .iso files from Native Instruments, as well as keeping track of installations.
+Open source program for mounting .iso files and keeping track of mounted filesystems.
 This program does not handle the .exe installations themselves, which have to be run with wine inside the filesystem.
+
+## Description
+This program is intended for linux users who would like to use NI plugins with their music production software.
+
+When you install plugins from Native Instruments using linux, most of the time the installation fails. 
+What happens is the wine-run Native Access cannot mount the installed files to the linux system.
+The installation does not fail completely, however. What remains of the install is a .iso file on the Downloads folder, which can be mounted with a few terminal commands:
+
+1. Create a mount point for your system using
+   `sudo mkdir mnt`
+
+2. Mount the iso file to your mnt folder
+    `sudo mnt -t udf {yourfilename.iso} -o unhide mnt`
+
+3. Inside the mounted filesystem, run the installer using wine, if it exists.
+
+This is fine for a few installs. However, when you have a large amount of installable libraries, the amount of terminal usage becomes increasingly large.
+Keeping notes of the installed programs can also get quite daunting.
+
+This program tries to solve the issue of installing many plugins by handling all of the installs inside a UI, making the progress of installing the libraries a bit faster.
+It also saves info on mounted files inside a .json file.
+
+This is a work-in-progress program and may become unusable in the future if the support for a legacy Native Access is ended.
 
 ## Install & requirements
 **Tested on**: Pop_Os! 22.04 
 
 **QT Version**: 6.5 or higher
 
-You also need the legacy 1.8 version of native access to work with wine. 
-This will not work with the newer electron-based Native Access 2.0, as it does not currently work with wine.
+### Build the program
 
 1. Copy the repository to your folder of choice
 2. Create a build folder inside the cloned folder using 
@@ -24,23 +46,21 @@ This will not work with the newer electron-based Native Access 2.0, as it does n
 
 5. `make install `
 
-To run this program, as of now it will only function properly with sudo(unsafe, so use at your own risk).
-Run:
+## Usage
 
-`sudo ./NativeInstall`
+1. Create your mount point as described in the Description:
+   `sudo mkdir mnt`
+2. Run the NativeInstall using
+   `sudo ./NativeInstall`
+3. Inside the program, choose your mount folder by pressing the button under "mount folder path"
+   ![image](https://github.com/constlo/NativeInstall/assets/79052688/872a1950-09c2-46d8-8f3d-79408454e926)
 
-This program will do the task of mounting and logging the mounted files. 
-The user still has to install the files inside the mounted filesystem.
+4. Choose the folder your .iso files are downloaded into, and scan the folder for .iso files by pressing the "scan"-button. 
+   ![image](https://github.com/constlo/NativeInstall/assets/79052688/94fed914-8077-4bcd-99b4-d0c76e14a708)
 
-## Description
+5. You should see your plugins inside a scroll area below the "Select" and "Scan"-buttons.
+   ![tuto](https://github.com/constlo/NativeInstall/assets/79052688/eeef6efe-6d3c-4fa6-9427-a95c62cc341a)
+ 
+6. Mount the file by pressing the "Mount" - button.
 
-![image](https://github.com/constlo/NativeInstall/assets/79052688/a6b1840a-9816-4ee6-b565-0feaf18b7fa3)
-
-NativeInstall is an application I created to keep help of tracking installations of the Native Instruments plugins.
-When using wine with Native Access, the program fails to install plugins. Instead, it downloads the .iso image from the internet,
-which the user has to then install manually using the terminal.
-
-This application does the task of mounting the files and saving the installations to the user history, which will be implemented soon.
-The task left to the user is to drive the .exe files from the mounted folder using wine.
-
-![image](https://github.com/constlo/NativeInstall/assets/79052688/0f448dd3-b6ee-4b1a-9eb2-23abdcfbc6f5)
+7. Open your file explorer(Nautilus, etc.) and drive the .exe installer inside the filesystem using wine.

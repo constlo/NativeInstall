@@ -62,6 +62,8 @@ This is a work-in-progress program and may become unusable in the future if the 
 5. You should see your plugins inside a scroll area below the "Select" and "Scan"-buttons.
    ![tuto](https://github.com/constlo/NativeInstall/assets/79052688/eeef6efe-6d3c-4fa6-9427-a95c62cc341a)
  
-6. Mount the file by pressing the "Mount" - button.
+7. Mount the file by pressing the "Mount" - button. You will see the list on the right side of the program update as you mount your files. 
 
-7. Open your file explorer(Nautilus, etc.) and drive the .exe installer inside the filesystem using wine.
+8. Open your file explorer(Nautilus, etc.) and drive the .exe installer inside the filesystem using wine.
+
+

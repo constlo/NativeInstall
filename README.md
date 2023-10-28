@@ -69,3 +69,7 @@ This is a work-in-progress program and may become unusable in the future if the 
 8. Open your file explorer(Nautilus, etc.) and drive the .exe installer inside the filesystem using wine.
 
 
+## Development goals
+See my trello board for future development:
+https://trello.com/b/pVQlRQgF/n
+
